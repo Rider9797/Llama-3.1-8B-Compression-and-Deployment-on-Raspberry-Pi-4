@@ -31,7 +31,7 @@ The pipeline performs three sequential steps:
     * Ensure all scripts reference the same volume name: `llama31-mlp-only`.
     * *Note: If you copied scripts from earlier versions, ensure `vol = modal.Volume.from_name("llama31-mlp-only")` is set in the quantization files.*
 
-## 🚀 Usage Guide
+## Usage Guide
 
 ### Step 1: Pruning
 Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
