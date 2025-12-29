@@ -1,5 +1,16 @@
 ## LLM Compression & Deployment on Raspberry Pi 4 (Prune $\to$ Convert into GGUF $\to$ Quantize $\to$ Deploy)
 
+```mermaid
+graph LR
+    A[Llama 3.1 8B Base] --> B(Structural Pruning)
+    B --> C(LoRA Recovery)
+    C --> D(GGUF Adaptation)
+    D --> E(IMatrix Quantization)
+    E --> F[Raspberry Pi 4 Deployment]
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#d4f1f9,stroke:#333,stroke-width:2px
+
+
 ## Overview
 This repository contains the methodology, scripts, and results for compressing Llama 3.1 8B to run efficiently on a Raspberry Pi 4 (8GB). By combining structural pruning, LoRA fine-tuning, and advanced quantization (AWQ/IMatrix) via llama.cpp, we reduced the model's memory footprint by ~80% while maintaining linguistic coherence.
 
@@ -18,13 +29,6 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 The project follows a multi-stage compression pipeline to transform a high-RAM requirement model into an edge-compatible executable.
 
-```mermaid
-graph LR
-    A[Llama 3.1 8B Base] --> B(Structural Pruning)
-    B --> C(LoRA Recovery)
-    C --> D(GGUF Adaptation)
-    D --> E(IMatrix Quantization)
-    E --> F[Raspberry Pi 4 Deployment]
+
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style F fill:#d4f1f9,stroke:#333,stroke-width:2px
+   
