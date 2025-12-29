@@ -14,10 +14,17 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 ## Methodology and Pipeline
 
 1. Structural Pruning (MLP-Only)
-To maintain compatibility with the Grouped-Query Attention (GQA) in Llama 3.1, we targeted only the MLP intermediate dimensions. This prevents head-count mismatches.
+## 🛠 Methodology & Pipeline
 
-**Target**: Layers 4 through 27 (Preserves embedding and output layers).
+The project follows a multi-stage compression pipeline to transform a high-RAM requirement model into an edge-compatible executable.
 
-Reduction: 25% reduction in MLP width (14,336 → 10,752).
-
-Result: 13.16% total parameter reduction (8.03B → 6.97B) while keeping critical attention mechanisms intact.
+```mermaid
+graph LR
+    A[Llama 3.1 8B Base] --> B(Structural Pruning)
+    B --> C(LoRA Recovery)
+    C --> D(GGUF Adaptation)
+    D --> E(IMatrix Quantization)
+    E --> F[Raspberry Pi 4 Deployment]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#d4f1f9,stroke:#333,stroke-width:2px
