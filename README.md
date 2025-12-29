@@ -16,7 +16,7 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 1. Structural Pruning (MLP-Only)
 To maintain compatibility with the Grouped-Query Attention (GQA) in Llama 3.1, we targeted only the MLP intermediate dimensions. This prevents head-count mismatches.
 
-Target: Layers 4 through 27 (Preserves embedding and output layers).
+**Target**: Layers 4 through 27 (Preserves embedding and output layers).
 
 Reduction: 25% reduction in MLP width (14,336 → 10,752).
 
