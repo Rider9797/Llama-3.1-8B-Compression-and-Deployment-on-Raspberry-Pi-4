@@ -27,6 +27,9 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 
 ## Methodology and Pipeline
+(Refer to the project report: report.pdf for a detailed description)
+
+
 1. **Structual Pruning**
    * MLP heads only
    * Layers 4 - 27
@@ -47,6 +50,8 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 
 ## Results
+(Refer to the project report: report.pdf for detailed results)
+
 
 **Size Reduction:**
 
