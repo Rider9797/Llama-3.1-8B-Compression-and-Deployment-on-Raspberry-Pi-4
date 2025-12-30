@@ -44,4 +44,55 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 5. **Deployment**
    * Deployment on Raspberry Pi 4
    * [Demo](https://drive.google.com/drive/folders/1g4A-UDaBDVvFdVbbToNewrKtA8pUW3VZ?usp=sharing)
-7. 
+
+
+## Results
+
+**Size Reduction:**
+
+| Model Variant | Precision / Format | Size (GB) |
+| :--- | :--- | :--- |
+| Llama 3.1 8B Base | FP32 | 32.0 |
+| Llama 3.1 8B Base | FP16 | 16.0 |
+| Llama 3.1 8B Pruned (25%) | FP16 | 12.99 |
+| Llama 3.1 8B Pruned | GGUF (4,6-bit Mixed) | ~3.99 |
+| Llama 3.1 8B Pruned | GGUF (3,4-bit Mixed) | ~3.27 |
+
+
+
+**Paramter Count:**
+| Model State | Total Parameter Count |
+| :--- | :--- |
+| Before Pruning | 8,030,261,248 (8.03B) |
+| After Pruning | 6,973,296,640 (6.97B) |
+| **Reduction %** | **13.16%** |
+
+
+
+
+
+
+
+
+**Perplexity (PPL) across Model Variants::**
+
+
+| Model Configuration | Perplexity (PPL) |
+| :--- | :--- |
+| FP16 (Base) | 5.56 |
+| Pruned FP16 | 11.38 |
+| Pruned FP16 Fine-tuned | 9.78 |
+| Standard Q4_K_M | 10.16 |
+| AWQ + Q4_K_M | 10.24 |
+| Standard Q3_K_M | 11.00 |
+| AWQ + Q3_K_M | 11.14 |
+
+
+
+
+
+| Model Variant | TTFT (s) | TTML (s) | TPS | Memory (GB) |
+| :--- | :--- | :--- | :--- | :--- |
+| Final Model(Pruned + 4, 6 Bit Quanitzed) | 4.35  | 189.86 | 0.80 | 4.99 |
+
+
