@@ -101,3 +101,74 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 | Final Model(Pruned + 4, 6 Bit Quanitzed) | 4.35  | 189.86 | 0.80 | 4.99 |
 
 
+
+## File Overview
+
+| File | Description |
+| :--- | :--- |
+| `pruning.py` | Patches `LLM-Pruner` and runs MLP-only pruning on an A100 GPU. Saves results to the cloud volume. |
+| `conversion.py` | Downloads the pruned checkpoint from the volume, "cleans" the custom architecture, and converts it to FP16 GGUF. |
+| `quantize_model.py` | **(Option A)** Performs standard quantization (Fastest setup). |
+| `quantize_imatrix.py` | **(Option B)** Performs "Data-Aware" quantization using an Importance Matrix. |
+| `convert_hf_to_gguf.py` | A patched version of the official script that handles variable MLP sizes (critical for pruned models). |
+
+## Prerequisites
+
+1.  **Modal Account:**
+    * Install the Modal client: `pip install modal`
+    * Setup your account: `modal setup`
+    
+2. **Llama.cpp Framework**
+   * Either install the framework or clone the [offical repository](https://github.com/ggml-org/llama.cpp)
+
+2.  **Hugging Face Token:**
+    * You must create a Secret in Modal named `huggingface-secret`.
+    * It should contain your `HF_TOKEN` (required to download Llama 3.1).
+
+3.  **Volume Configuration:**
+    * Ensure all scripts reference the same volume name: `llama31-mlp-only`.
+  
+
+
+## Usage Guide
+
+### Step 1: Pruning
+Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
+
+```bash
+modal run pruning.py
+```
+
+- Input: meta-llama/Llama-3.1-8B-Instruct
+- Action: Prunes 25% of MLP layers.
+- Output: Saved to Modal Volume llama31-mlp-only.
+
+### Step 2: Conversion to GGUF Format
+Mounts the volume, standardizes the checkpoint structure, and creates a raw FP16 GGUF file.
+
+```bash
+modal run conversion.py
+```
+
+- Output: /data/pruned_model.gguf (inside the cloud volume).
+
+### Step 3: Quantization
+Choose one of the following options based on your target hardware.
+
+#### Option A: Standard Quantization (Fastest)
+Best for 4-bit models (Q4_K_M) or if you want results quickly.
+Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
+
+```bash
+modal run quantize_model.py
+```
+
+#### Option B: Smart IMatrix Quantization (Recommended for Q3)
+Best for 3-bit models (Q3_K_M). It calculates an "Importance Matrix" to identify and protect essential weights, preventing the quality degradation usually associated with heavy compression.
+
+```bash
+modal run quantize_imatrix.py
+```
+
+
+
