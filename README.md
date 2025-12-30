@@ -133,7 +133,7 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 ## Usage Guide
 
 ### Step 1: Pruning
-Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
+Use Modal to run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
 
 ```bash
 modal run pruning.py
