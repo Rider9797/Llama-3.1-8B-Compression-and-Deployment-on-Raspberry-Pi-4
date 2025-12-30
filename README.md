@@ -114,6 +114,7 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 | File | Description |
 | :--- | :--- |
+| `report.pdf` | Project Report |
 | `pruning.py` | Patches `LLM-Pruner` and runs MLP-only pruning on an A100 GPU. Saves results to the cloud volume. |
 | `conversion.py` | Downloads the pruned checkpoint from the volume, "cleans" the custom architecture, and converts it to FP16 GGUF. |
 | `quantize_model.py` | **(Option A)** Performs standard quantization (Fastest setup). |
