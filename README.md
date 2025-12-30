@@ -153,7 +153,7 @@ modal run conversion.py
 - Output: /data/pruned_model.gguf (inside the cloud volume).
 
 ### Step 3: Quantization
-The following quantization techniques have been used for this project, but you can use others based on your hardware requirements. [Learn more about quantinzation formats in llama.cpp here](https://github.com/ggml-org/llama.cpp/pull/1684).
+The following quantization techniques have been used for this project, but you can use others based on your hardware requirements. [Learn more about quantization formats in llama.cpp here](https://github.com/ggml-org/llama.cpp/pull/1684).
 
 #### Option A: Standard Quantization (Fastest)
 Applies (Q4_K_M) quantization format, which assigns 4,6 bit mixed precision quantization.
