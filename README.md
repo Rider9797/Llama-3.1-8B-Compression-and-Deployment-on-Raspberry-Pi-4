@@ -20,11 +20,11 @@ graph LR
 This repository contains the methodology, scripts, and results for compressing Llama 3.1 8B to run efficiently on a Raspberry Pi 4 (8GB). By combining structural pruning, LoRA fine-tuning, and advanced quantization (AWQ/IMatrix) via llama.cpp, we reduced the model's memory footprint by ~80% while maintaining linguistic coherence.
 
 
-Contributors
-* **Abubakar Minhas** - []
-* **Sana Humayun** - [https://github.com/sanahumayun]
-* **Muhammad Rayed** - [GitHub Profile Link]
-* **Hammad Yousaf** - [GitHub Profile Link]
+## Contributors
+* **Muhammad Rayed** - [Rider9797](https://github.com/Rider9797)
+* **Abubakar Minhas** - [AbubakarMin1](https://github.com/AbubakarMin1)
+* **Sana Humayun** - [sanahumayun](https://github.com/sanahumayun) 
+* **Hammad Yousaf** - [HammadYousaf](https://github.com/HammadYousaf-26100387)
 
 
 
