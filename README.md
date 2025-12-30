@@ -89,7 +89,7 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 
 
-
+**Hardware Benchmarks of the Final Model on Rasbperry Pi 4**
 
 | Model Variant | TTFT (s) | TTML (s) | TPS | Memory (GB) |
 | :--- | :--- | :--- | :--- | :--- |
