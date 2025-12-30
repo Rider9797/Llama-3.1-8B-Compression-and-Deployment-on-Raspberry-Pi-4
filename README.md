@@ -153,10 +153,10 @@ modal run conversion.py
 - Output: /data/pruned_model.gguf (inside the cloud volume).
 
 ### Step 3: Quantization
-Choose one of the following options based on your target hardware.
+The following quantization techniques have been used for this project, but you can use others based on your hardware requirements. [Learn more about quantinzation formats in llama.cpp here](https://github.com/ggml-org/llama.cpp/pull/1684).
 
 #### Option A: Standard Quantization (Fastest)
-Best for 4-bit models (Q4_K_M) or if you want results quickly.
+Applies (Q4_K_M) quantization format, which assigns 4,6 bit mixed precision quantization.
 Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
 
 ```bash
