@@ -1,11 +1,106 @@
-# Llama 3.1 Compressiong Pipeline (Prune $\to$ GGUF $\to$ Quantize)
+## LLM Compression & Deployment on Raspberry Pi 4
 
-This repository contains a complete, cloud-based pipeline to shrink **Llama 3.1 8B** for efficient inference on edge devices (like Raspberry Pi 5). It utilizes [Modal](https://modal.com) to leverage high-performance cloud GPUs (A100/T4) for the heavy lifting.
+```mermaid
+graph LR
+    A[Llama 3.1 8B Base] --> B(Pruning)
+    B --> C(LoRA Finetuning)
+    C --> D(GGUF Conversion)
+    D --> E(Mixed Precision Quantization)
+    E --> F[Raspberry Pi 4 Deployment]
 
-The pipeline performs three sequential steps:
-1.  **Pruning:** Removes 25% of the model's weights (specifically targeting MLP layers) to lower RAM usage while preserving attention mechanisms.
-2.  **Conversion:** Converts the "jagged" pruned model architecture into the standard GGUF format.
-3.  **Quantization:** Compresses the model bits (to 4-bit or 3-bit) for final deployment.
+    %% Define the Dark Grey Style
+    classDef darkGrey fill:#333,stroke:#000,stroke-width:2px,color:#fff;
+    
+    %% Apply the style to all nodes
+    class A,B,C,D,E,F darkGrey;
+```
+
+## Overview
+This repository contains the methodology, scripts, and results for compressing Llama 3.1 8B to run efficiently on a Raspberry Pi 4 (8GB). By combining structural pruning, LoRA fine-tuning, and advanced quantization (AWQ/IMatrix) via llama.cpp, we reduced the model's memory footprint by ~80% while maintaining linguistic coherence.
+
+
+
+
+## Abstract
+
+Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hindered by massive RAM requirements. A standard Llama 3.1 8B model requires ~16GB (FP16), making it impossible to run on a Raspberry Pi 4. This project bridges this gap by applying a multi-stage compression pipeline. We successfully reduced the model size from 16GB to 3.99GB, achieving functional inference on Rasberyy Pi 4 using Llama.cpp.
+
+
+## Methodology and Pipeline
+(Refer to the project report: report.pdf for a detailed description)
+
+
+1. **Structual Pruning**
+   * MLP heads only
+   * Layers 4 - 27
+
+2. **Low Rank Adaptation**
+   * Recover the model's intelligence
+   * Dataset: yahma/alpaca-cleaned
+
+3. **GGUF Conversion**
+   * Patched the official convert_hf_to_gguf.py conversion file in llama.cpp to cater for variable MLP widths
+
+4. **Mixed Precision Quantization**
+   * Used llama.cpp to quantize the model into variable bit widths
+
+5. **Deployment**
+   * Deployment on Raspberry Pi 4
+   * [Demo](https://drive.google.com/drive/folders/1g4A-UDaBDVvFdVbbToNewrKtA8pUW3VZ?usp=sharing)
+
+
+## Results
+(Refer to the project report: report.pdf for detailed results)
+
+
+**Size Reduction:**
+
+| Model Variant | Precision / Format | Size (GB) |
+| :--- | :--- | :--- |
+| Llama 3.1 8B Base | FP32 | 32.0 |
+| Llama 3.1 8B Base | FP16 | 16.0 |
+| Llama 3.1 8B Pruned (25%) | FP16 | 12.99 |
+| Llama 3.1 8B Pruned | GGUF (4,6-bit Mixed) | ~3.99 |
+| Llama 3.1 8B Pruned | GGUF (3,4-bit Mixed) | ~3.27 |
+
+
+
+**Paramter Count:**
+| Model State | Total Parameter Count |
+| :--- | :--- |
+| Before Pruning | 8,030,261,248 (8.03B) |
+| After Pruning | 6,973,296,640 (6.97B) |
+| **Reduction %** | **13.16%** |
+
+
+
+
+
+
+
+
+**Perplexity (PPL) across Model Variants::**
+
+
+| Model Configuration | Perplexity (PPL) |
+| :--- | :--- |
+| FP16 (Base) | 5.56 |
+| Pruned FP16 | 11.38 |
+| Pruned FP16 Fine-tuned | 9.78 |
+| Standard Q4_K_M | 10.16 |
+| AWQ + Q4_K_M | 10.24 |
+| Standard Q3_K_M | 11.00 |
+| AWQ + Q3_K_M | 11.14 |
+
+
+
+**Hardware Benchmarks of the Final Model on Rasbperry Pi 4:**
+
+| Model Variant | TTFT (s) | TTML (s) | TPS | Memory (GB) |
+| :--- | :--- | :--- | :--- | :--- |
+| Final Model(Pruned + 4, 6 Bit Quanitzed) | 4.35  | 189.86 | 0.80 | 4.99 |
+
+
 
 ## File Overview
 
@@ -22,6 +117,9 @@ The pipeline performs three sequential steps:
 1.  **Modal Account:**
     * Install the Modal client: `pip install modal`
     * Setup your account: `modal setup`
+    
+2. **Llama.cpp Framework**
+   * Either install the framework or clone the [offical repository](https://github.com/ggml-org/llama.cpp)
 
 2.  **Hugging Face Token:**
     * You must create a Secret in Modal named `huggingface-secret`.
@@ -29,11 +127,13 @@ The pipeline performs three sequential steps:
 
 3.  **Volume Configuration:**
     * Ensure all scripts reference the same volume name: `llama31-mlp-only`.
+  
+
 
 ## Usage Guide
 
 ### Step 1: Pruning
-Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
+Use Modal to run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
 
 ```bash
 modal run pruning.py
@@ -53,10 +153,10 @@ modal run conversion.py
 - Output: /data/pruned_model.gguf (inside the cloud volume).
 
 ### Step 3: Quantization
-Choose one of the following options based on your target hardware.
+The following quantization techniques have been used for this project, but you can use others based on your hardware requirements. [Learn more about quantization formats in llama.cpp here](https://github.com/ggml-org/llama.cpp/pull/1684).
 
 #### Option A: Standard Quantization (Fastest)
-Best for 4-bit models (Q4_K_M) or if you want results quickly.
+Applies (Q4_K_M) quantization format, which assigns 4,6 bit mixed precision quantization.
 Run the pruning job on a cloud A100 GPU. This script automatically applies necessary fixes to the `LLM-Pruner` library.
 
 ```bash
