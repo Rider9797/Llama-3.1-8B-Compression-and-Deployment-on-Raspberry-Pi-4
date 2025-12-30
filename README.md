@@ -1,15 +1,19 @@
-## LLM Compression & Deployment on Raspberry Pi 4 (Prune $\to$ Convert into GGUF $\to$ Quantize $\to$ Deploy)
+## LLM Compression & Deployment on Raspberry Pi 4
 
 ```mermaid
 graph LR
-    A[Llama 3.1 8B Base] --> B(Structural Pruning)
-    B --> C(LoRA Recovery)
-    C --> D(GGUF Adaptation)
-    D --> E(IMatrix Quantization)
+    A[Llama 3.1 8B Base] --> B(Pruning)
+    B --> C(LoRA Finetuning)
+    C --> D(GGUF Conversion)
+    D --> E(Mixed Precision Quantization)
     E --> F[Raspberry Pi 4 Deployment]
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style F fill:#d4f1f9,stroke:#333,stroke-width:2px
 
+    %% Define the Dark Grey Style
+    classDef darkGrey fill:#333,stroke:#000,stroke-width:2px,color:#fff;
+    
+    %% Apply the style to all nodes
+    class A,B,C,D,E,F darkGrey;
+```
 
 ## Overview
 This repository contains the methodology, scripts, and results for compressing Llama 3.1 8B to run efficiently on a Raspberry Pi 4 (8GB). By combining structural pruning, LoRA fine-tuning, and advanced quantization (AWQ/IMatrix) via llama.cpp, we reduced the model's memory footprint by ~80% while maintaining linguistic coherence.
@@ -23,15 +27,21 @@ Deploying state-of-the-art Large Language Models (LLMs) on edge devices is hinde
 
 
 ## Methodology and Pipeline
+1. **Structual Pruning**
+   * MLP heads only
+   * Layers 4 - 27
 
-1. Structural Pruning (MLP-Only)
-## 🛠 Methodology & Pipeline
+2. **Low Rank Adaptation**
+   * Recover the model's intelligence
+   * Dataset: yahma/alpaca-cleaned
 
-The project follows a multi-stage compression pipeline to transform a high-RAM requirement model into an edge-compatible executable.
+3. **GGUF Conversion**
+   * Patched the official convert_hf_to_gguf.py conversion file in llama.cpp to cater for variable MLP widths
 
+4. **Mixed Precision Quantization**
+   * Used llama.cpp to quantize the model into variable bit widths
 
-    
-   
-
-
-this is my readme file for a project, i want the mermaid diagram to be below the title, ,give me the full updated code
+5. **Deployment**
+   * Deployment on Raspberry Pi 4
+   * [Demo](https://drive.google.com/drive/folders/1g4A-UDaBDVvFdVbbToNewrKtA8pUW3VZ?usp=sharing)
+7. 
