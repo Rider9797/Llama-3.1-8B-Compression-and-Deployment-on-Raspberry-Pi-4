@@ -179,9 +179,9 @@ Best for 3-bit models (Q3_K_M). It calculates an "Importance Matrix" to identify
 modal run quantize_imatrix.py
 ```
 
-## What I Learned
+## What We Learned
 
-I got introduced to and comfortable with the llama.cpp framework and learned how to:
+We got introduced to and comfortable with the llama.cpp framework and learned how to:
 
 * Implement llama.cpp support for models that have a different architecture than what the llama.cpp framework expects 
 * Quantize models using llama.cpp
